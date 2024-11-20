@@ -33,3 +33,4 @@ EXPOSE 4040 8080 7077
 
 # Set the working directory
 WORKDIR /opt/airflow
+
