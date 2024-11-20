@@ -2,6 +2,7 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from extract import fetch_data
 from transform import transform
 from load import load_csv_to_postgres, get_postgres_engine
@@ -59,9 +60,22 @@ with DAG(
     )
 
     # Transform task
-    transform_task = PythonOperator(
+    transform_task = SparkSubmitOperator(
         task_id='transform_task',
-        python_callable=transform
+        application='transform.py',  # Path to your Spark notebook or script
+        name='goldfintech-transform',
+        conn_id='spark_default',  # Ensure this Airflow connection is configured
+        application_args=[],  # Add arguments if needed
+        verbose=True,
+        conf={
+            'spark.driver.memory': '1g',
+            'spark.executor.memory': '1g',
+        },
+        env_vars={
+            'JAVA_HOME': '/opt/bitnami/java',
+            'SPARK_HOME': '/opt/bitnami/spark',
+        }
+
     )
 
     # Load task

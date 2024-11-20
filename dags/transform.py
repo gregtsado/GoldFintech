@@ -20,5 +20,6 @@ def transform():
 
     spark_df.repartition(1).write.mode('overwrite').option('header','true').csv('output')
     pandas_df = spark_df.toPandas()
+    spark.stop()
     pandas_df.to_csv('output/msftstock.csv', index =False)
     
