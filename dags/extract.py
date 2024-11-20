@@ -6,7 +6,6 @@ import os
 
 apikey = os.getenv('api_key')
 
-
 def fetch_data():
     url= f'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=MSFT&apikey={apikey}'
     r = requests.get(url)
@@ -37,6 +36,4 @@ def fetch_data():
     
     print(f'{len(df)} rows successfully extracted')
     
-fetch_data()
 
-      

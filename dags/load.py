@@ -27,18 +27,18 @@ def get_postgres_engine():
     
     return engine
 
-def load_csv_to_postgres(csv_file_path, table_name, engine):
+def load_csv_to_postgres(table_name, engine):
     """
     Loads data from a csv file to a postgres DB table
     
     Parameters:
-    -csv_file_path(str): Path to csv file
+    
     -table_name(str): a postgres table
     -engine (sqlalchemy.engine): an SQL alchemy eninge object
-    -schema (str): a postgres DB schema
+    
     """
     
-    df = pd.read_csv('msftstock.csv')
+    df = pd.read_csv('output/msftstock.csv')
     
     try:
         with engine.connect() as connection:
@@ -46,20 +46,24 @@ def load_csv_to_postgres(csv_file_path, table_name, engine):
             
         print(f'{len(df)} rows successfully Loaded to Postgres DB')
     except Exception as e:
-        print(f"An error occurred: {e}")    
+        print(f"An error occurred: {e}")
+               
+    session = sessionmaker(bind=engine)
+    session = session()
+    session.commit()  
     
-engine = get_postgres_engine()
+# engine = get_postgres_engine()
     
 
     
 
     
-load_csv_to_postgres('msftstock.csv','goldfintech', engine)
-    
-    # execute code
-session = sessionmaker(bind=engine)
-session = session()
-session.commit()
-    
-    
-print('pipeline executed successfully')
+# load_csv_to_postgres('goldfintech', engine)
+# execute code   
+# def execute(engine):       
+#     session = sessionmaker(bind=engine)
+#     session = session()
+#     session.commit()
+        
+        
+   
